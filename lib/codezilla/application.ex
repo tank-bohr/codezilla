@@ -8,13 +8,16 @@ defmodule Codezilla.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Codezilla.Worker.start_link(arg)
-      # {Codezilla.Worker, arg}
+      {Cluster.Supervisor, [topologies(), [name: Codezilla.ClusterSupervisor]]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Codezilla.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defp topologies do
+    Application.get_env(:libcluster, :topologies, [])
   end
 end

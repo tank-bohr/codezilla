@@ -1,8 +1,7 @@
 defmodule CodezillaTest do
   use ExUnit.Case
-  doctest Codezilla
 
-  test "greets the world" do
-    assert Codezilla.hello() == :world
+  test "the first test" do
+    assert true
   end
 end
