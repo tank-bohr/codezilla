@@ -51,7 +51,7 @@ resource "kubernetes_namespace" "codezilla" {
   }
 }
 
-resource "kubernetes_deployment" "example" {
+resource "kubernetes_deployment" "codezilla-deployment" {
   metadata {
     name = "codezilla-deployment"
     labels = {
@@ -94,7 +94,7 @@ resource "kubernetes_deployment" "example" {
   }
 }
 
-resource "kubernetes_cluster_role" "pod-reader" {
+resource "kubernetes_role" "pod-reader" {
   metadata {
     name = "pod-reader"
     namespace = kubernetes_namespace.codezilla.metadata.0.name
@@ -107,7 +107,7 @@ resource "kubernetes_cluster_role" "pod-reader" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "read-pods" {
+resource "kubernetes_role_binding" "read-pods" {
   metadata {
     name = "read-pods"
     namespace = kubernetes_namespace.codezilla.metadata.0.name
@@ -121,7 +121,7 @@ resource "kubernetes_cluster_role_binding" "read-pods" {
 
   role_ref {
     kind      = "Role"
-    name      = kubernetes_cluster_role.pod-reader.metadata.0.name
+    name      = kubernetes_role.pod-reader.metadata.0.name
     api_group = "rbac.authorization.k8s.io"
   }
 }

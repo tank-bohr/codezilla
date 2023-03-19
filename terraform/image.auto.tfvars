@@ -1,1 +1,1 @@
-app_image = "ghcr.io/tank-bohr/codezilla:latest"
+app_image = "ghcr.io/tank-bohr/codezilla:main"
