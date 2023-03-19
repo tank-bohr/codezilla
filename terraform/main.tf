@@ -45,7 +45,27 @@ provider "kubernetes" {
   )
 }
 
-resource "kubernetes_namespace" "codezilla" {
+resource "kubernetes_secret" "docker-cfg" {
+  metadata {
+    name = "docker-cfg"
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "${var.registry_server}" = {
+          "username" = var.registry_username
+          "password" = var.gh_token
+          "auth"     = base64encode("${var.registry_username}:${var.gh_token}")
+        }
+      }
+    })
+  }
+}
+
+resource "kubernetes_namespace" "codezilla-ns" {
   metadata {
     name = "codezilla"
   }
@@ -54,13 +74,14 @@ resource "kubernetes_namespace" "codezilla" {
 resource "kubernetes_deployment" "codezilla-deployment" {
   metadata {
     name = "codezilla-deployment"
+    namespace = kubernetes_namespace.codezilla-ns.metadata.0.name
     labels = {
       app = "codezilla"
     }
   }
 
   spec {
-    replicas = 3
+    replicas = 1
 
     selector {
       match_labels = {
@@ -97,7 +118,7 @@ resource "kubernetes_deployment" "codezilla-deployment" {
 resource "kubernetes_role" "pod-reader" {
   metadata {
     name = "pod-reader"
-    namespace = kubernetes_namespace.codezilla.metadata.0.name
+    namespace = kubernetes_namespace.codezilla-ns.metadata.0.name
   }
 
   rule {
@@ -110,13 +131,13 @@ resource "kubernetes_role" "pod-reader" {
 resource "kubernetes_role_binding" "read-pods" {
   metadata {
     name = "read-pods"
-    namespace = kubernetes_namespace.codezilla.metadata.0.name
+    namespace = kubernetes_namespace.codezilla-ns.metadata.0.name
   }
 
   subject {
     name      = "default"
     kind      = "ServiceAccount"
-    namespace = kubernetes_namespace.codezilla.metadata.0.name
+    namespace = kubernetes_namespace.codezilla-ns.metadata.0.name
   }
 
   role_ref {

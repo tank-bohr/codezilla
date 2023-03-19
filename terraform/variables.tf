@@ -4,6 +4,12 @@ variable "do_token" {
   sensitive   = true
 }
 
+variable "gh_token" {
+  description = "Token for GH container registry access"
+  type        = string
+  sensitive   = true
+}
+
 variable "do_region" {
   # https://docs.digitalocean.com/products/platform/availability-matrix/
   description = "region slug"
@@ -39,4 +45,16 @@ variable "k8s_cluster_name" {
 variable "app_image" {
   description = "Docker image from registry"
   type        = string
+}
+
+variable "registry_server" {
+  description = "Docker container registry server"
+  type        = string
+  default     = "ghcr.io"
+}
+
+variable "registry_username" {
+  description = "Docker container registry username to auth"
+  type        = string
+  default     = "terraform"
 }
