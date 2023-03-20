@@ -4,8 +4,8 @@ NAMESPACE ?= codezilla
 $(KUBECONFIG):
 	@make -C terraform kubeconfig > $(KUBECONFIG)
 
-describe-pods: $(KUBECONFIG)
-	@kubectl --kubeconfig=$(KUBECONFIG) --namespace=$(NAMESPACE) describe pods
+get-pods: $(KUBECONFIG)
+	@kubectl --kubeconfig=$(KUBECONFIG) --namespace=$(NAMESPACE) get pods
 
 apply: $(KUBECONFIG)
 	@kubectl --kubeconfig $(KUBECONFIG) --namespace $(NAMESPACE) apply -f k8s/deployment.yml
