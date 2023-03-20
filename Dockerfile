@@ -62,6 +62,10 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
+LABEL org.opencontainers.image.source=https://github.com/tank-bohr/codezilla
+LABEL org.opencontainers.image.description="Codzilla container image"
+LABEL org.opencontainers.image.licenses=MIT
+
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
 

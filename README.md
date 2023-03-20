@@ -1,21 +1,21 @@
 # Codezilla
 
-**TODO: Add description**
+## Work with k8s cluster
 
-## Installation
+### Use particular kubeconfig
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `codezilla` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:codezilla, "~> 0.1.0"}
-  ]
-end
+```bash
+export KUBECONFIG=kubeconfig.yml
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/codezilla>.
+### Get pods
 
+```bash
+kubectl --namespace=codezilla get pods
+```
+
+### Run remote iex console
+
+```bash
+kubectl exec -it $APP --namespace=codezilla -- bin/app remote
+```

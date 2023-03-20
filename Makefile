@@ -1,20 +1,27 @@
-KUBECONFIG ?= kubeconfig.yml
+KUBECONFIG_YML ?= kubeconfig.yml
 NAMESPACE ?= codezilla
 
-$(KUBECONFIG):
-	@make -C terraform kubeconfig > $(KUBECONFIG)
+$(KUBECONFIG_YML):
+	@make -C terraform kubeconfig > $(KUBECONFIG_YML)
 
-get-pods: $(KUBECONFIG)
-	@kubectl --kubeconfig=$(KUBECONFIG) --namespace=$(NAMESPACE) get pods
+get-pods: $(KUBECONFIG_YML)
+	@kubectl --kubeconfig=$(KUBECONFIG_YML) --namespace=$(NAMESPACE) get pods
 
-apply: $(KUBECONFIG)
-	@kubectl --kubeconfig $(KUBECONFIG) --namespace $(NAMESPACE) apply -f k8s/deployment.yml
+get-pod: $(KUBECONFIG_YML)
+	@kubectl get pods \
+		--kubeconfig=$(KUBECONFIG_YML) \
+		--namespace=$(NAMESPACE) \
+		-o jsonpath='{.items[?(@.metadata.labels.app == "codezilla")].metadata.name}' \
+		| awk '{print $$1;}'
 
-replace: $(KUBECONFIG)
-	@kubectl --kubeconfig $(KUBECONFIG) --namespace $(NAMESPACE) replace -f k8s/deployment.yml
+apply: $(KUBECONFIG_YML)
+	@kubectl --kubeconfig $(KUBECONFIG_YML) --namespace $(NAMESPACE) apply -f k8s/deployment.yml
 
-delete: $(KUBECONFIG)
-	@kubectl --kubeconfig $(KUBECONFIG) --namespace $(NAMESPACE) delete deployment codezilla-deployment
+replace: $(KUBECONFIG_YML)
+	@kubectl --kubeconfig $(KUBECONFIG_YML) --namespace $(NAMESPACE) replace -f k8s/deployment.yml
+
+delete: $(KUBECONFIG_YML)
+	@kubectl --kubeconfig $(KUBECONFIG_YML) --namespace $(NAMESPACE) delete deployment codezilla-deployment
 
 clean:
-	@rm $(KUBECONFIG)
+	@rm $(KUBECONFIG_YML)

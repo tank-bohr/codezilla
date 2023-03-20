@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: codezilla
-        image: ghcr.io/tank-bohr/codezilla@sha256:bb52ba64b37bf02b05c9ebe5430ee4071b4396b230b015d07571a7f0c74a94ec
+        image: ghcr.io/tank-bohr/codezilla:main
         env:
         - name: POD_IP
           valueFrom:
