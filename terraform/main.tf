@@ -47,14 +47,18 @@ provider "kubernetes" {
 
 resource "kubernetes_secret" "docker-cfg" {
   metadata {
-    name = "docker-cfg"
+    name        = "docker-cfg"
+    namespace   = "kube-system"
+    annotations = {
+      "digitalocean.com/dosecret-identifier" = ""
+    }
   }
 
   type = "kubernetes.io/dockerconfigjson"
 
   data = {
     ".dockerconfigjson" = jsonencode({
-      auths = {
+      "auths" = {
         "${var.registry_server}" = {
           "username" = var.registry_username
           "password" = var.gh_token
@@ -68,50 +72,6 @@ resource "kubernetes_secret" "docker-cfg" {
 resource "kubernetes_namespace" "codezilla-ns" {
   metadata {
     name = "codezilla"
-  }
-}
-
-resource "kubernetes_deployment" "codezilla-deployment" {
-  metadata {
-    name = "codezilla-deployment"
-    namespace = kubernetes_namespace.codezilla-ns.metadata.0.name
-    labels = {
-      app = "codezilla"
-    }
-  }
-
-  spec {
-    replicas = 1
-
-    selector {
-      match_labels = {
-        app = "codezilla"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "codezilla"
-        }
-      }
-
-      spec {
-        container {
-          image = var.app_image
-          name  = "codezilla"
-
-          env {
-            name = "POD_IP"
-            value_from {
-              field_ref {
-                field_path = "status.podIP"
-              }
-            }
-          }
-        }
-      }
-    }
   }
 }
 

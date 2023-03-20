@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: codezilla-deployment
+  namespace: codezilla
+  labels:
+    app: codezilla
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: codezilla
+  template:
+    metadata:
+      labels:
+        app: codezilla
+    spec:
+      containers:
+      - name: codezilla
+        image: ghcr.io/tank-bohr/codezilla:main
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
