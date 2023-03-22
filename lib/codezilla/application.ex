@@ -8,7 +8,9 @@ defmodule Codezilla.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Cluster.Supervisor, [topologies(), [name: Codezilla.ClusterSupervisor]]}
+      {Cluster.Supervisor, [topologies(), [name: Codezilla.ClusterSupervisor]]},
+      Codezilla.Flummoxed,
+      Codezilla.Flibbertigibbet
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
