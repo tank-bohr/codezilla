@@ -19,6 +19,7 @@ spec:
       containers:
       - name: codezilla
         image: ghcr.io/tank-bohr/codezilla:main
+        imagePullPolicy: Always
         env:
         - name: POD_IP
           valueFrom:
