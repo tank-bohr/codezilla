@@ -17,5 +17,5 @@ kubectl --namespace=codezilla get pods
 ### Run remote iex console
 
 ```bash
-kubectl exec -it $APP --namespace=codezilla -- bin/app remote
+kubectl exec -it $POD_NAME --namespace=codezilla -- bin/app remote
 ```
