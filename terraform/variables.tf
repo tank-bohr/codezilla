@@ -42,11 +42,6 @@ variable "k8s_cluster_name" {
   default     = "codezilla"
 }
 
-variable "app_image" {
-  description = "Docker image from registry"
-  type        = string
-}
-
 variable "registry_server" {
   description = "Docker container registry server"
   type        = string
