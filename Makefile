@@ -24,7 +24,7 @@ delete: $(KUBECONFIG_YML)
 
 remote: $(KUBECONFIG_YML)
 	$(SET_POD_NAME)
-	kubectl exec -it $(POD_NAME) --kubeconfig $(KUBECONFIG_YML) --namespace=codezilla -- bin/app remote
+	kubectl exec -it $(POD_NAME) --kubeconfig $(KUBECONFIG_YML) --namespace $(NAMESPACE) -- bin/app remote
 
 clean:
 	@rm $(KUBECONFIG_YML)
