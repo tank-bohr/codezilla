@@ -20,7 +20,7 @@ variable "do_region" {
 variable "do_k8s_version" {
   description = "Grab the latest version slug from `doctl kubernetes options versions`"
   type        = string
-  default     = "1.25.4-do.0"
+  default     = "1.26.3-do.0"
 }
 
 variable "do_k8s_node_size" {
