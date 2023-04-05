@@ -8,7 +8,7 @@ SET_POD_NAME = $(eval POD_NAME = $(shell kubectl get pods \
 		| awk '{print $$1;}'))
 
 $(KUBECONFIG_YML):
-	@make -C terraform kubeconfig > $(KUBECONFIG_YML)
+	@make --no-print-directory -C terraform kubeconfig > $(KUBECONFIG_YML)
 
 get-pods: $(KUBECONFIG_YML)
 	@kubectl --kubeconfig=$(KUBECONFIG_YML) --namespace=$(NAMESPACE) get pods
